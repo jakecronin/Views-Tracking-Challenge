@@ -1,21 +1,29 @@
 import * as functions from "firebase-functions";
-import {db} from "./index";
+import * as admin from "firebase-admin";
+const db = admin.firestore();
 
 /* BONUS OPPORTUNITY
 It's not great (it's bad) to throw all of this code in one file.
 Can you help us organize this code better?
 */
 
+export interface User {
+  // Id matches the document id in the Users collection
+  id: string;
 
-export interface Recording {
-    id: string; // matches document id in firestore
-    creatorId: string; // id of the user that created this recording
-    uniqueViewCount: number;
+  // uniqueRecordingViewCount is the number of distinct recordings viewed by this user
+  uniqueRecordingViewCount?: number;
 }
 
-export interface User {
-    id: string; // mathes both the user's document id
-    uniqueRecordingViewCount: number; // sum of all recording views
+export interface Recording {
+  // Id matches document id in the Recordings collection
+  id: string;
+
+  // CreatorId is the Id of the user who made this recording
+  creatorId: string;
+
+  // uniqueViewCount is the number of distinct users that viewed this recording
+  uniqueViewCount?: number;
 }
 
 export enum Collections {
@@ -23,7 +31,7 @@ export enum Collections {
     Recordings = "Recordings"
 }
 
-export async function trackRecordingView(viewerId: string, recordingId: string): Promise<void> {
+export async function handleTrackRecordingView(viewerId: string, recordingId: string): Promise<void> {
   // TODO: implement this function
 
   // logs can be viewed in the firebase emulator ui
